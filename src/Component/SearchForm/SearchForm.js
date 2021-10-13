@@ -1,33 +1,36 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import style from 'Component/SearchForm/SearchForm.module.css';
 
-export default class SearchForm extends Component {
-  state = {
-    query: '',
+
+export default function SearchForm({ onSubmit }) {
+  const [query, setQuery] = useState('');
+  // state = {
+  //   query: '',
+  // };
+
+  const handleChange = e => {
+    setQuery(e.currentTarget.value.toLowerCase());
+
+    // this.setState({ query: e.currentTarget.value.toLowerCase() });
   };
 
-  handleChange = e => {
-    this.setState({ query: e.currentTarget.value.toLowerCase() });
-  };
-
-  handleSubmit = e => {
+ const handleSubmit = e => {
     e.preventDefault();
-    if (this.state.query.trim() === '') {
+    if (query.trim() === '') {
       toast('Go clearly!');
       return;
     }
 
-    this.props.onSubmit(this.state.query);
-    this.setState({ query: '' });
+    onSubmit(query);
+    setQuery( '' );
   };
 
-  render() {
+  
     return (
       <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.handleSubmit}>
+        <form className="SearchForm" onSubmit={handleSubmit}>
           <button type="submit" className="SearchForm-button">
             <span className="SearchForm-button-label">Try me!</span>
           </button>
@@ -37,13 +40,13 @@ export default class SearchForm extends Component {
             type="text"
             autoComplete="off"
             autoFocus
-            value={this.state.query}
-            onChange={this.handleChange}
+            value={query}
+            onChange={handleChange}
           />
         </form>
       </header>
     );
-  }
+  
 }
 
 SearchForm.propTypes = {
